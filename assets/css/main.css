@@ -1539,6 +1539,12 @@ section,
 /*--------------------------------------------------------------
 # Services Section
 --------------------------------------------------------------*/
+.services .services-table thead th {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  color: var(--contrast-color);
+}
+
 .services .service-item {
   display: flex;
   background-color: var(--surface-color);
