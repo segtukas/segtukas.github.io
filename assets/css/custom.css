@@ -449,6 +449,627 @@ main .section {
   text-align: right;
 }
 
+.services-page .services {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #101820;
+}
+
+.services-page .services::before {
+  position: absolute;
+  z-index: -1;
+  inset: -35%;
+  background:
+    radial-gradient(ellipse at 18% 25%, rgba(55, 116, 139, 0.3), transparent 42%),
+    radial-gradient(ellipse at 82% 32%, rgba(246, 178, 95, 0.17), transparent 38%),
+    radial-gradient(ellipse at 62% 82%, rgba(42, 91, 87, 0.28), transparent 44%),
+    linear-gradient(125deg, #101820 10%, #182631 48%, #17221f 75%, #101820 100%);
+  background-size: 150% 150%;
+  content: "";
+  animation: services-gradient-drift 22s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+.services-page .services > .container {
+  position: relative;
+  z-index: 1;
+}
+
+.about-shapes {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.about-shapes > .container {
+  position: relative;
+  z-index: 1;
+}
+
+.about-decoration {
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.about-decoration-circle {
+  top: 12%;
+  right: 8%;
+  width: clamp(5rem, 11vw, 9rem);
+  aspect-ratio: 1;
+  border: 2px solid rgba(246, 178, 95, 0.42);
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, rgba(246, 178, 95, 0.15), rgba(246, 178, 95, 0.015) 70%);
+  box-shadow: 0 0 44px rgba(246, 178, 95, 0.1);
+  animation: about-circle-float 8s ease-in-out infinite;
+}
+
+.about-decoration-triangle {
+  bottom: 12%;
+  left: 7%;
+  width: 0;
+  height: 0;
+  border-right: clamp(2.5rem, 5vw, 4rem) solid transparent;
+  border-bottom: clamp(4.5rem, 8vw, 6.5rem) solid rgba(94, 165, 255, 0.17);
+  border-left: clamp(2.5rem, 5vw, 4rem) solid transparent;
+  filter: drop-shadow(0 8px 18px rgba(94, 165, 255, 0.16));
+  animation: about-triangle-drift 10s ease-in-out infinite;
+}
+
+@keyframes about-circle-float {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+
+  50% {
+    transform: translateY(-18px) scale(1.06);
+  }
+}
+
+@keyframes about-triangle-drift {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-8deg);
+  }
+
+  50% {
+    transform: translateY(14px) rotate(12deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-decoration {
+    animation: none;
+  }
+}
+
+@keyframes services-gradient-drift {
+  0% {
+    transform: translate3d(-2%, -1%, 0) scale(1);
+    background-position: 0% 40%;
+  }
+
+  50% {
+    transform: translate3d(1%, 2%, 0) scale(1.04);
+    background-position: 70% 55%;
+  }
+
+  100% {
+    transform: translate3d(2%, -1%, 0) scale(1.02);
+    background-position: 100% 45%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .services-page .services::before {
+    animation: none;
+    transform: none;
+  }
+}
+
+.about-page .skill-kanban {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.about-page .kanban-column {
+  padding: 1.25rem;
+  border: 1px solid rgba(246, 178, 95, 0.2);
+  border-radius: 22px;
+  background: rgba(17, 24, 31, 0.75);
+  box-shadow: 0 18px 30px rgba(0, 0, 0, 0.12);
+}
+
+.about-page .kanban-column h3 {
+  margin-bottom: 1.1rem;
+  color: var(--custom-heading-text);
+  text-align: center;
+  font-size: clamp(1.5rem, 2vw, 2rem);
+}
+
+.about-page .skill-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+  padding: 1rem 1rem 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.about-page .skill-card-plan {
+  border-left: 4px solid #f6b25f;
+}
+
+.about-page .skill-card-learn {
+  border-left: 4px solid #5ea5ff;
+}
+
+.about-page .skill-card-done {
+  border-left: 4px solid #6fd49a;
+}
+
+.about-page .skill-name {
+  margin: 0;
+  color: var(--custom-heading-text);
+  font-family: var(--custom-body-font);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.about-page .skill-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--custom-body-text);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.about-page .skill-card-plan .skill-status {
+  background: rgba(246, 178, 95, 0.15);
+  color: #ffd39b;
+}
+
+.about-page .skill-card-learn .skill-status {
+  background: rgba(94, 165, 255, 0.15);
+  color: #b9d7ff;
+}
+
+.about-page .skill-card-done .skill-status {
+  background: rgba(111, 212, 154, 0.15);
+  color: #b9f3d1;
+}
+
+.about-page .skill-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.about-page .skill-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--custom-muted-text);
+}
+
+.about-page .skill-meta strong {
+  color: var(--custom-heading-text);
+}
+
+.competence-dashboard {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.28fr) minmax(0, 1fr);
+  overflow: hidden;
+  border: 1px solid rgba(246, 178, 95, 0.22);
+  border-radius: 26px;
+  background: linear-gradient(145deg, rgba(18, 26, 33, 0.98), rgba(11, 16, 21, 0.98));
+  box-shadow: 0 24px 54px rgba(0, 0, 0, 0.24);
+}
+
+.dashboard-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.4rem;
+  border-right: 1px solid rgba(255, 255, 255, 0.09);
+  background: linear-gradient(180deg, rgba(246, 178, 95, 0.06), rgba(255, 255, 255, 0.015));
+}
+
+.dashboard-level {
+  padding: 0.25rem 0.15rem 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.summary-label,
+.summary-highlight small {
+  display: block;
+  color: var(--custom-muted-text);
+  font-size: 0.85rem;
+}
+
+.dashboard-level > strong {
+  display: block;
+  color: var(--custom-heading-text);
+  font-size: 2.4rem;
+  line-height: 1.1;
+}
+
+.dashboard-level > strong small {
+  color: #f6b25f;
+  font-size: 1rem;
+}
+
+.summary-highlight {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.85rem;
+  border-radius: 15px;
+}
+
+.level-highlight {
+  background: rgba(94, 165, 255, 0.12);
+}
+
+.rank-highlight {
+  background: rgba(111, 212, 154, 0.12);
+}
+
+.summary-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 2.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #f6b25f;
+  font-size: 1.2rem;
+}
+
+.summary-highlight strong {
+  display: block;
+  color: var(--custom-heading-text);
+  font-size: 1.15rem;
+  line-height: 1.25;
+}
+
+.dashboard-progress {
+  padding: 0.9rem 0 0.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dashboard-progress .progress-label {
+  font-size: 0.88rem;
+}
+
+.dashboard-progress > small {
+  display: block;
+  margin-top: 0.5rem;
+  color: var(--custom-muted-text);
+}
+
+.dashboard-statistics {
+  display: grid;
+  gap: 0.65rem;
+  padding-top: 0.25rem;
+}
+
+.dashboard-statistics > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dashboard-statistics span {
+  color: var(--custom-muted-text);
+  font-size: 0.9rem;
+}
+
+.dashboard-statistics span i {
+  margin-right: 0.35rem;
+  color: #f6b25f;
+}
+
+.dashboard-statistics strong {
+  color: var(--custom-heading-text);
+}
+
+.rank-guide {
+  padding-top: 0.25rem;
+  color: var(--custom-muted-text);
+}
+
+.rank-guide summary {
+  color: var(--custom-heading-text);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.rank-guide ul {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0.8rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rank-guide li {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.rank-guide li strong {
+  color: var(--custom-heading-text);
+  text-align: right;
+}
+
+.dashboard-kanban {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+  padding: 1.25rem;
+}
+
+.competence-dashboard .kanban-column {
+  min-width: 0;
+  padding: 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 17px;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.competence-dashboard .kanban-column h3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 3rem;
+  margin: 0 0 0.85rem;
+  padding: 0.6rem 0.35rem;
+  border-radius: 12px;
+  color: var(--custom-heading-text);
+  text-align: center;
+  font-family: var(--custom-body-font);
+  font-size: clamp(0.9rem, 1.2vw, 1.1rem);
+  font-weight: 800;
+}
+
+.competence-dashboard .plan-column h3 {
+  border-bottom: 3px solid #f6b25f;
+  background: rgba(246, 178, 95, 0.1);
+}
+
+.competence-dashboard .learn-column h3 {
+  border-bottom: 3px solid #5ea5ff;
+  background: rgba(94, 165, 255, 0.1);
+}
+
+.competence-dashboard .done-column h3 {
+  border-bottom: 3px solid #6fd49a;
+  background: rgba(111, 212, 154, 0.1);
+}
+
+.competence-dashboard .skill-card {
+  align-items: flex-start;
+  min-height: 8.5rem;
+  border-radius: 18px;
+  padding: 0.9rem;
+  margin-bottom: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.065), rgba(255, 255, 255, 0.025));
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.13);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.competence-dashboard .skill-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+.competence-dashboard .skill-card-plan {
+  border-top: 3px solid #f6b25f;
+}
+
+.competence-dashboard .skill-card-learn {
+  border-top: 3px solid #5ea5ff;
+}
+
+.competence-dashboard .skill-card-done {
+  border-top: 3px solid #6fd49a;
+}
+
+.competence-dashboard .skill-name {
+  margin: 0;
+  font-family: var(--custom-body-font);
+  font-size: 1rem;
+  line-height: 1.4;
+  font-weight: 700;
+  color: var(--custom-heading-text);
+}
+
+.competence-dashboard .skill-status {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 0.55rem;
+  padding: 0.3rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--custom-body-text);
+}
+
+.competence-dashboard .skill-card-plan .skill-status {
+  background: rgba(246, 178, 95, 0.15);
+  color: #ffd39b;
+}
+
+.competence-dashboard .skill-card-learn .skill-status {
+  background: rgba(94, 165, 255, 0.15);
+  color: #b9d7ff;
+}
+
+.competence-dashboard .skill-card-done .skill-status {
+  background: rgba(111, 212, 154, 0.15);
+  color: #b9f3d1;
+}
+
+.competence-dashboard .skill-xp {
+  display: block;
+  width: max-content;
+  margin-top: 0.5rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--custom-muted-text);
+  font-size: 0.75rem;
+}
+
+.competence-dashboard .skill-xp strong {
+  color: var(--custom-heading-text);
+}
+
+.skill-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding: 1rem 1.25rem;
+  background: rgba(246, 178, 95, 0.08);
+  border: 1px solid rgba(246, 178, 95, 0.22);
+  border-radius: 16px;
+  color: var(--custom-heading-text);
+  font-size: 1.05rem;
+}
+
+.skill-total strong {
+  color: #f6b25f;
+}
+
+.skill-progress {
+  width: 100%;
+  height: 0.7rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.skill-progress span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #f6b25f 0%, #ffcf93 100%);
+  box-shadow: 0 0 10px rgba(246, 178, 95, 0.45);
+}
+
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-weight: 700;
+  color: var(--custom-heading-text);
+  margin-bottom: 0.8rem;
+}
+
+.progress-bar-track {
+  width: 100%;
+  height: 1rem;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.progress-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #f6b25f 0%, #ffcf93 100%);
+  box-shadow: 0 0 10px rgba(246, 178, 95, 0.5);
+}
+
+.module {
+  background: linear-gradient(180deg, rgba(15, 23, 30, 0.55), rgba(12, 18, 22, 0.9));
+}
+
+.module-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.25rem;
+}
+
+.module-card,
+.module-summary {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(246, 178, 95, 0.2);
+  border-radius: 22px;
+  padding: 1.6rem;
+  box-shadow: 0 18px 30px rgba(0, 0, 0, 0.12);
+}
+
+.module-card {
+  position: relative;
+}
+
+.module-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f6b25f 0%, #e38d5b 100%);
+  color: #1d2125;
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+.module-card h3,
+.module-summary h3 {
+  margin-bottom: 0.8rem;
+}
+
+.module-summary {
+  margin-top: 1.75rem;
+}
+
+.module-summary ul {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: var(--custom-muted-text);
+}
+
+.module-summary li + li {
+  margin-top: 0.65rem;
+}
+
 @media (max-width: 768px) {
   main .section {
     padding-top: 3.5rem;
@@ -475,5 +1096,56 @@ main .section {
     padding: 0.75rem 0.7rem;
     font-size: 0.92rem;
   }
+
+  .module-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-page .skill-kanban,
+  .dashboard-kanban {
+    grid-template-columns: 1fr;
+  }
+
+  .competence-dashboard {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .dashboard-summary {
+    border-right: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+  }
 }
 
+@media (min-width: 769px) and (max-width: 1050px) {
+  .competence-dashboard {
+    grid-template-columns: minmax(210px, 0.32fr) minmax(0, 1fr);
+  }
+
+  .dashboard-kanban {
+    gap: 0.5rem;
+    padding: 0.85rem;
+  }
+
+  .competence-dashboard .kanban-column {
+    padding: 0.6rem;
+  }
+
+  .competence-dashboard .skill-card {
+    padding: 0.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .competence-dashboard {
+    border-radius: 18px;
+  }
+
+  .dashboard-summary,
+  .dashboard-kanban {
+    padding: 1rem;
+  }
+
+  .rank-guide li {
+    font-size: 0.7rem;
+  }
+}
