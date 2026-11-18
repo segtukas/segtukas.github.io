@@ -996,6 +996,29 @@ main .section {
   color: var(--custom-body-text);
 }
 
+.competence-dashboard .skill-status-control {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  width: 100%;
+  margin-top: 0.55rem;
+  color: var(--custom-muted-text);
+  font-size: 0.78rem;
+}
+
+.competence-dashboard .skill-status-select {
+  min-width: 0;
+  max-width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  padding: 0.35rem 1.7rem 0.35rem 0.55rem;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--custom-heading-text);
+  font: inherit;
+  cursor: pointer;
+}
+
 .competence-dashboard .skill-card-plan .skill-status {
   background: rgba(246, 178, 95, 0.15);
   color: #ffd39b;

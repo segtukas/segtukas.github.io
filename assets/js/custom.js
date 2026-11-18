@@ -5,6 +5,201 @@
   "use strict";
 
   document.addEventListener("DOMContentLoaded", function () {
+    var competencies = [
+      { name: "PCB plokščių projektavimas", status: "Planuojama", xp: 30 },
+      { name: "Mikrovaldiklių programavimas", status: "Planuojama", xp: 40 },
+      { name: "FPGA plokščių projektavimas", status: "Planuojama", xp: 25 },
+      { name: "Jutiklių schemos", status: "Planuojama", xp: 25 },
+      { name: "Analoginių ir skaitmeninių grandinių analizė", status: "Mokomasi", xp: 50 },
+      { name: "C / C++ įterptinėms sistemoms", status: "Mokomasi", xp: 55 },
+      { name: "Matavimai osciloskopu ir multimetru", status: "Mokomasi", xp: 45 },
+      { name: "Elektroninių schemų skaitymas", status: "Atlikta", xp: 70 },
+      { name: "Litavimas ir prototipų surinkimas", status: "Atlikta", xp: 65 },
+      { name: "MATLAB signalų analizė", status: "Atlikta", xp: 60 }
+    ];
+
+    var statusColumns = {
+      "Planuojama": document.querySelector(".plan-column"),
+      "Mokomasi": document.querySelector(".learn-column"),
+      "Atlikta": document.querySelector(".done-column")
+    };
+    var statusClasses = {
+      "Planuojama": "skill-card-plan",
+      "Mokomasi": "skill-card-learn",
+      "Atlikta": "skill-card-done"
+    };
+    var statusLabels = ["Planuojama", "Mokomasi", "Atlikta"];
+    var storageKey = "competenceStatusByName";
+
+    function loadCompetenceStatuses() {
+      try {
+        var savedStatuses = JSON.parse(localStorage.getItem(storageKey));
+        if (!savedStatuses) return;
+
+        competencies.forEach(function (item) {
+          if (statusLabels.indexOf(savedStatuses[item.name]) !== -1) {
+            item.status = savedStatuses[item.name];
+          }
+        });
+      } catch (error) {
+        console.warn("Nepavyko nuskaityti įgūdžių būsenų iš Local Storage.", error);
+      }
+    }
+
+    function saveCompetenceStatuses() {
+      var statusesByName = {};
+      competencies.forEach(function (item) {
+        statusesByName[item.name] = item.status;
+      });
+
+      try {
+        localStorage.setItem(storageKey, JSON.stringify(statusesByName));
+      } catch (error) {
+        console.warn("Nepavyko išsaugoti įgūdžių būsenų Local Storage.", error);
+      }
+    }
+
+    loadCompetenceStatuses();
+
+    function setText(id, value) {
+      var element = document.getElementById(id);
+      if (element) {
+        element.textContent = value;
+      }
+    }
+
+    function renderCompetencies() {
+      Object.keys(statusColumns).forEach(function (status) {
+        var column = statusColumns[status];
+        if (!column) return;
+
+        column.querySelectorAll(".skill-card").forEach(function (card) {
+          card.remove();
+        });
+
+        competencies
+          .filter(function (item) { return item.status === status; })
+          .sort(function (a, b) { return b.xp - a.xp; })
+          .forEach(function (item) {
+            var card = document.createElement("article");
+            card.className = "skill-card " + statusClasses[status];
+
+            var name = document.createElement("h4");
+            name.className = "skill-name";
+            name.textContent = item.name;
+
+            var statusLabel = document.createElement("label");
+            statusLabel.className = "skill-status-control";
+            statusLabel.appendChild(document.createTextNode("Būsena: "));
+
+            var select = document.createElement("select");
+            select.className = "skill-status-select";
+            select.setAttribute("aria-label", item.name + " būsena");
+            statusLabels.forEach(function (label) {
+              var option = document.createElement("option");
+              option.value = label;
+              option.textContent = label;
+              option.selected = item.status === label;
+              select.appendChild(option);
+            });
+            select.addEventListener("change", function () {
+              item.status = select.value;
+              saveCompetenceStatuses();
+              renderCompetencies();
+              updateDashboard();
+            });
+            statusLabel.appendChild(select);
+
+            var xp = document.createElement("span");
+            xp.className = "skill-xp";
+            xp.appendChild(document.createTextNode("XP: "));
+            var xpValue = document.createElement("strong");
+            xpValue.textContent = item.xp;
+            xp.appendChild(xpValue);
+
+            card.appendChild(name);
+            card.appendChild(statusLabel);
+            card.appendChild(xp);
+            column.appendChild(card);
+          });
+      });
+    }
+
+    function calculateLevel(earnedXp) {
+      if (earnedXp >= 300) {
+        return { level: 4, rank: "Profesionalas", levelStart: 300, levelSize: 150 };
+      }
+      if (earnedXp >= 150) {
+        return { level: 3, rank: "Specialistas", levelStart: 150, levelSize: 150 };
+      }
+      if (earnedXp >= 50) {
+        return { level: 2, rank: "Praktikantas", levelStart: 50, levelSize: 100 };
+      }
+      return { level: 1, rank: "Pradedantysis", levelStart: 0, levelSize: 50 };
+    }
+
+    function calculateCompletedPercent(completedCount, totalCount) {
+      return totalCount === 0 ? 0 : Math.round(completedCount / totalCount * 100);
+    }
+
+    function updateDashboard() {
+      var totalXp = competencies.reduce(function (sum, item) { return sum + item.xp; }, 0);
+      var earnedXp = competencies
+        .filter(function (item) { return item.status === "Atlikta"; })
+        .reduce(function (sum, item) { return sum + item.xp; }, 0);
+      var completedCount = competencies.filter(function (item) {
+        return item.status === "Atlikta";
+      }).length;
+      var completedPercent = calculateCompletedPercent(completedCount, competencies.length);
+      var levelInfo = calculateLevel(earnedXp);
+      var level = levelInfo.level;
+      var rank = levelInfo.rank;
+      var levelStart = levelInfo.levelStart;
+      var levelSize = levelInfo.levelSize;
+
+      var xpInLevel = earnedXp - levelStart;
+      var progress = level >= 4 ? 100 : Math.min(100, Math.round(xpInLevel / levelSize * 100));
+      var nextLevelXp = level >= 4 ? null : levelStart + levelSize;
+
+      setText("earned-xp", earnedXp);
+      setText("dashboard-level", level);
+      setText("dashboard-rank", rank);
+      setText("skill-count", competencies.length);
+      setText("completed-count", completedCount);
+      setText("completed-percent", completedPercent + "%");
+      setText("level-progress-percent", progress + "%");
+      setText(
+        "level-progress-label",
+        nextLevelXp === null ? "Maksimalus pasiektas lygis" : "Progresas iki " + (level + 1) + " lygio"
+      );
+      var progressFill = document.getElementById("level-progress-fill");
+      if (progressFill) {
+        progressFill.style.width = progress + "%";
+        progressFill.parentElement.setAttribute("aria-valuenow", progress);
+        progressFill.parentElement.setAttribute(
+          "aria-valuetext",
+          nextLevelXp === null
+            ? "Pasiektas aukščiausias lygis"
+            : xpInLevel + " iš " + levelSize + " XP šiame lygyje"
+        );
+      }
+      setText(
+        "level-progress-text",
+        nextLevelXp === null
+          ? "Pasiektas aukščiausias lygis"
+          : xpInLevel + " / " + levelSize + " XP šiame lygyje · trūksta " + (nextLevelXp - earnedXp) + " XP"
+      );
+
+      var dashboardLevel = document.querySelector(".dashboard-level");
+      dashboardLevel && dashboardLevel.setAttribute(
+        "title",
+        "Visų " + competencies.length + " įgūdžių bendra XP suma: " + totalXp
+      );
+    }
+
+    renderCompetencies();
+    updateDashboard();
+
     document.querySelectorAll(".rating-slider").forEach(function (slider) {
       var output = document.getElementById(slider.id + "-value");
 
@@ -24,16 +219,17 @@
     var contactForm = document.querySelector(".contact-lab-form");
     var formResult = document.getElementById("form-result");
     var submitButton = document.getElementById("submit-contact");
+
+    if (!contactForm || !formResult || !submitButton) {
+      return;
+    }
+
     var validationSummary = document.createElement("div");
     validationSummary.id = "form-validation-summary";
     validationSummary.className = "form-validation-summary";
     validationSummary.setAttribute("role", "alert");
     validationSummary.setAttribute("aria-live", "polite");
     submitButton.parentNode.insertBefore(validationSummary, submitButton);
-
-    if (!contactForm || !formResult || !submitButton) {
-      return;
-    }
 
     var hasSubmitted = false;
 
