@@ -19,9 +19,9 @@
   $contact->ajax = true;
   
   $contact->to = $receiving_email_address;
-  $contact->from_name = $_POST['name'];
+  $contact->from_name = $_POST['name'] . ' ' . ($_POST['surname'] ?? '');
   $contact->from_email = $_POST['email'];
-  $contact->subject = $_POST['subject'];
+  $contact->subject = 'Nauja žinutė svetainėje';
 
   // Uncomment below code if you want to use SMTP to send emails. You need to enter your correct SMTP credentials
   /*
@@ -33,10 +33,15 @@
   );
   */
 
-  $contact->add_message( $_POST['name'], 'From');
+  $contact->add_message($_POST['name'] ?? '', 'Vardas');
+  $contact->add_message($_POST['surname'] ?? '', 'Pavardė');
   $contact->add_message( $_POST['email'], 'Email');
   isset($_POST['phone']) && $contact->add_message($_POST['phone'], 'Phone');
-  $contact->add_message( $_POST['message'], 'Message', 10);
+  isset($_POST['address']) && $contact->add_message($_POST['address'], 'Adresas');
+  isset($_POST['rating1']) && $contact->add_message($_POST['rating1'], 'Svetainės dizaino įvertinimas');
+  isset($_POST['rating2']) && $contact->add_message($_POST['rating2'], 'Svetainės patogumo įvertinimas');
+  isset($_POST['rating3']) && $contact->add_message($_POST['rating3'], 'Informacijos informatyvumo įvertinimas');
+  $contact->add_message($_POST['message'], 'Message', 10);
 
   echo $contact->send();
 ?>
